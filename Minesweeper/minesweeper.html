@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Minesweeper</title>
+        <canvas id="gc" width="400" height="400" style="z-index: 1;background-size: 100%; border:5px solid black; position: absolute;"></canvas>
+        <img src="lose.png" style="z-index: 0;position:absolute;" id="leimg" width="410" height="410" alt="lose screen"></img>
+        <img src="win.png" style="z-index: 0;position:absolute;" id="loimg" width="410" height="410" alt="win screen"></img>
+        <body></body>
+        <script id="sc">
+            var canv=document.getElementById("gc");
+            var ctx=canv.getContext("2d");
+            var doof=0;
+            var numMines=12;
+            var trza=[];
+            ctx.fillStyle="black";
+            ctx.fillRect(0,0,canv.width,canv.height);
+            for(var k=0; k<numMines;k++){
+                var q=Math.floor(Math.random()*8);
+                var r=Math.floor(Math.random()*8);
+                var zeid=String(q)+"button"+String(r);
+                if(trza.indexOf(zeid)==-1){
+                    trza.push(zeid);
+                }
+                else{
+                    k--;
+                }
+            } 
+            for(var i=0;i<400;i+=50){
+                for(var j=0;j<400;j+=50){ 
+                    var buton = document.createElement("button");
+                    buton.id=String(i/50)+"button"+String(j/50);
+                    buton.onclick=function(){myFunction(this)};
+                    buton.oncontextmenu=function(){othfunction(this)};
+                    buton.style["width"]="40px";
+                    buton.style["height"]="40px";
+                    buton.style["position"]="absolute";
+                    buton["type"]="button";
+                    buton.innerText="";
+                    buton["name"]="rah";
+                    //strange positioning needed
+                    buton.style["left"]=String(j+18)+"px";
+                    buton.style["top"]=String(i+18)+"px";
+                    buton.style["zIndex"]=2;
+                    buton.style["color"]="red";
+                    //add button to html "script"
+                    document.body.appendChild(buton);
+                }
+            }
+            function myFunction(a) {
+                if(trza.indexOf(a.id)==-1){
+                    var tip=0;
+                    var u=Number(a.id.charAt(0));
+                    var v=Number(a.id.charAt(7));
+                    var compare=[String(u-1)+"button"+String(v-1),String(u-1)+"button"+String(v),String(u-1)+"button"+String(v+1),String(u)+"button"+String(v-1),String(u)+"button"+String(v+1),String(u+1)+"button"+String(v-1),String(u+1)+"button"+String(v),String(u+1)+"button"+String(v+1)];
+                    for(var g=0; g<8;g++){
+                        if(trza.indexOf(String(compare[g]))!=-1){
+                            tip++;
+                        }
+                    }
+                    a.innerText=String(tip);
+                    doof++;
+                    if(doof==64-numMines){
+                        var r=document.getElementById("loimg");
+                        r.style["zIndex"]=3;
+                    }
+                }
+                else{
+                    a.innerText="B";
+                    var h=document.getElementById("leimg");
+                    h.style["zIndex"]=3;
+                }
+            }
+            var f =document.querySelectorAll ("button");
+            function othfunction(a){
+                a.innerText="F";
+                return false;
+            }
+            f.oncontextmenu=function(){
+                return false;
+            }
+            canv.oncontextmenu = function() {
+                return false;
+            }
+        </script>
+    </head>
+</html>
